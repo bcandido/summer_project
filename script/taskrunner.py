@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
 import xml.etree.ElementTree as ElementTree
-from xml.dom import minidom
-import subprocess
 from threading import Thread
+from xml.dom import minidom
+#from lxml import etree, objectify
+import subprocess
+#import StringIO
 import string
 import sys
 import re
@@ -13,6 +15,8 @@ ARG_DESCRIPTOR = "-D"
 ARG_PLUGIN = "-P"
 ARG_PARALLEL = "--parallel"
 
+DTD_FILE = "descriptor.dtd"
+
 def main():
 
 	if ARG_DESCRIPTOR in sys.argv:
@@ -20,7 +24,6 @@ def main():
 	
 	if ARG_PLUGIN in sys.argv:
 		pluginName = getPlugin(sys.argv)
-		print pluginName
 		plugin = descriptor.findall('./plugin[@name="'+pluginName+'"]')
 		runPlugin(plugin[0])
 
@@ -28,8 +31,33 @@ def main():
 def getDescriptor(arguments):
 	idx = arguments.index("-D")
 	fileDescriptor = arguments[idx+1]
-	return ElementTree.parse(fileDescriptor)
+	
+	if validDescriptor(fileDescriptor):
+		ret = ElementTree.parse(fileDescriptor)
+	else:
+		ret = None
+		
+	return ret
 
+#---------------------------------------------------------------------------------
+def validDescriptor(xml_file):
+	from lxml import etree, objectify
+	from StringIO import StringIO
+
+	f = open(xml_file)
+	xml_doc = f.read()
+	f.close()
+	
+	f = open(DTD_FILE)
+	dtd_doc = f.read()
+	f.close()
+
+	dtd = etree.DTD(StringIO(dtd_doc))
+	tree = objectify.parse((xml_doc))
+	#return dtd.validate(tree)
+	return True
+
+#---------------------------------------------------------------------------------
 def getPlugin(arguments):
 	idx = arguments.index("-P")
 	return arguments[idx+1]
@@ -71,17 +99,17 @@ def execute(commands=None):
 			while '' in cmd:
 				cmd.remove('')
 			cmd = updateCommand(cmd)
-			subCmd = []
-			for i in range(0, len(cmd.count("|"))):
-				if cmd[i] != "|":
+			#subCmd = []
+			#for i in range(0, len(cmd.count("|"))):
+				#if cmd[i] != "|":
 					
-			if cmd.count("|") > 0:
-				for c in cmd:
-					
-			else:
-				output = subprocess.check_output(cmd, shell=False)
+			#if cmd.count("|") > 0:
+				## implement logic
+			#else:
+				#output = subprocess.check_output(cmd, shell=False)
 			
-			#print output
+			output = subprocess.check_output(cmd, shell=False)
+			print output
 	return
 
 #---------------------------------------------------------------------------------
