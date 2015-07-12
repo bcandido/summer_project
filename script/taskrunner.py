@@ -20,7 +20,6 @@ def main():
 	
 	if ARG_PLUGIN in sys.argv:
 		pluginName = getPlugin(sys.argv)
-		print pluginName
 		plugin = descriptor.findall('./plugin[@name="'+pluginName+'"]')
 		runPlugin(plugin[0])
 
@@ -71,17 +70,13 @@ def execute(commands=None):
 			while '' in cmd:
 				cmd.remove('')
 			cmd = updateCommand(cmd)
-			subCmd = []
-			for i in range(0, len(cmd.count("|"))):
-				if cmd[i] != "|":
-					
-			if cmd.count("|") > 0:
-				for c in cmd:
-					
-			else:
-				output = subprocess.check_output(cmd, shell=False)
+			#if cmd.count("|") > 0:
+				## implement logic
+			#else:
+				#output = subprocess.check_output(cmd, shell=False)
 			
-			#print output
+			output = subprocess.check_output(cmd, shell=False)
+			print output
 	return
 
 #---------------------------------------------------------------------------------
