@@ -8,12 +8,17 @@ import string
 import sys
 import re
 
+# DEFINES
+ARG_DESCRIPTOR = "-D"
+ARG_PLUGIN = "-P"
+ARG_PARALLEL = "--parallel"
+
 def main():
 
-	if "-D" in sys.argv:
+	if ARG_DESCRIPTOR in sys.argv:
 		descriptor = getDescriptor(sys.argv)
 	
-	if "-P" in sys.argv:
+	if ARG_PLUGIN in sys.argv:
 		pluginName = getPlugin(sys.argv)
 		print pluginName
 		plugin = descriptor.findall('./plugin[@name="'+pluginName+'"]')
@@ -35,7 +40,7 @@ def runPlugin(plugin=None):
 	taskList = plugin.findall("./taskList/task")
 	
 	threading = False
-	if "--parallel" in sys.argv:
+	if ARG_PARALLEL in sys.argv:
 		threading = True
 	runTasks(taskList, threading)
 
