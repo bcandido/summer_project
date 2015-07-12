@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE taskrunner SYSTEM "descriptor.dtd">
 <taskrunner>
 	<plugin name="shell">
-		<description> This plugin executes shell commands </description>
+<!-- 		<description> This plugin executes shell commands </description> -->
 		<taskList>
-			<task>
+			<!--<task>
 				<description> displays files in the directory </description>
 				<command> ls </command>
+			</task>-->
+			<task>
+				<description> show the processes running </description>
+				<command>ls | grep wc -l</command>
 			</task>
 			<task>
-				<command>ls | grep wc -l</command>
-				<description> show the processes running </description>
+				<description> displays files in the directory </description>
+				<command> ls %PATH -al </command>
 			</task>
 		</taskList>
 	</plugin>
@@ -17,12 +22,8 @@
 		<description> This plugin executes shell commands </description>
 		<taskList>
 			<task>
-				<description> displays files in the directory </description>
-				<command name="list"> ls %PATH -al </command>
-			</task>
-			<task>
 				<description> home path </description>
-				<command name="list"> ls -al </command>
+				<command> ls -l </command>
 			</task>
 		</taskList>
 	</plugin>
