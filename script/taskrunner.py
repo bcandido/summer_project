@@ -61,7 +61,10 @@ def getTaskDescription(taskList):
 	task_idx = 0
 	for task in taskList:
 		description = task.findall("./description")
-		taskDescription[task_idx] = description[0].text.strip()
+		if description:
+			taskDescription[task_idx] = description[0].text.strip()
+		else:
+			taskDescription[task_idx] = "No Task Description"
 		task_idx = task_idx + 1
 	return taskDescription
 
