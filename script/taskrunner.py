@@ -5,6 +5,7 @@ from xml.dom import minidom
 import subprocess
 from threading import Thread
 import string
+import time
 import sys
 import re
 
@@ -22,7 +23,13 @@ def main():
 	if ARG_PLUGIN in sys.argv:
 		pluginName = getPlugin(sys.argv)
 		plugin = descriptor.findall('./plugin[@name="'+pluginName+'"]')
+		
+		start_time = time.clock()
 		runPlugin(plugin[0])
+		executionTime = time.clock() - start_time
+		
+		if executionTime != None:
+			print "All tasks were executed in %s"%(executionTime)
 
 #---------------------------------------------------------------------------------
 def getDescriptor(arguments):
@@ -34,7 +41,6 @@ def getDescriptor(arguments):
 def getPlugin(arguments):
 	idx = arguments.index("-P")
 	return arguments[idx+1]
-	
 
 #---------------------------------------------------------------------------------
 def runPlugin(plugin=None):
@@ -47,7 +53,12 @@ def runPlugin(plugin=None):
 		threading = False
 		if ARG_PARALLEL in sys.argv:
 			threading = True
+		start_time = time.clock()
 		runTasks(taskList, threading)
+		end_time = time.clock()
+		mean = end_time - start_time
+		return mean
+	
 
 #---------------------------------------------------------------------------------
 def getTaskDescription(taskList):
