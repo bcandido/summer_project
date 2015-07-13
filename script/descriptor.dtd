@@ -1,9 +1,9 @@
 <!-- ELEMENT LIST -->
 <!ELEMENT taskrunner (plugin*)>
-<!ELEMENT plugin (description, taskList)>
+<!ELEMENT plugin (description*, taskList)>
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT taskList (task*)>
-<!ELEMENT task (description, command)>
+<!ELEMENT task (description*, command)>
 <!ELEMENT command (#PCDATA)>
 
 <!-- ATTRIBUTE LIST -->
