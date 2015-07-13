@@ -53,12 +53,7 @@ def runPlugin(plugin=None):
 		threading = False
 		if ARG_PARALLEL in sys.argv:
 			threading = True
-		start_time = time.clock()
-		runTasks(taskList, threading)
-		end_time = time.clock()
-		mean = end_time - start_time
-		return mean
-	
+		runTasks(taskList, threading)	
 
 #---------------------------------------------------------------------------------
 def getTaskDescription(taskList):
