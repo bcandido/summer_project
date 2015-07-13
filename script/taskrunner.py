@@ -12,6 +12,7 @@ import re
 ARG_DESCRIPTOR = "-D"
 ARG_PLUGIN = "-P"
 ARG_PARALLEL = "--parallel"
+ARG_TASKVIEW = "--list"
 
 def main():
 
@@ -29,6 +30,7 @@ def getDescriptor(arguments):
 	fileDescriptor = arguments[idx+1]
 	return ElementTree.parse(fileDescriptor)
 
+#---------------------------------------------------------------------------------
 def getPlugin(arguments):
 	idx = arguments.index("-P")
 	return arguments[idx+1]
@@ -38,10 +40,29 @@ def getPlugin(arguments):
 def runPlugin(plugin=None):
 	taskList = plugin.findall("./taskList/task")
 	
-	threading = False
-	if ARG_PARALLEL in sys.argv:
-		threading = True
-	runTasks(taskList, threading)
+	if ARG_TASKVIEW in sys.argv:
+		taskDescription = getTaskDescription(taskList)
+		showTaskDescription(taskDescription)
+	else:
+		threading = False
+		if ARG_PARALLEL in sys.argv:
+			threading = True
+		runTasks(taskList, threading)
+
+#---------------------------------------------------------------------------------
+def getTaskDescription(taskList):
+	taskDescription = {}
+	task_idx = 0
+	for task in taskList:
+		description = task.findall("./description")
+		taskDescription[task_idx] = description[0].text.strip()
+		task_idx = task_idx + 1
+	return taskDescription
+
+#---------------------------------------------------------------------------------
+def showTaskDescription(taskDescription):
+	for key in taskDescription.keys():
+		print "Task %s: %s"%(key, taskDescription[key])
 
 #---------------------------------------------------------------------------------
 def runTasks(taskList, threading=False):
