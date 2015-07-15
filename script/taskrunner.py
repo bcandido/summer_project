@@ -9,7 +9,7 @@ import time
 import sys
 import re
 
-# DEFINES
+# ARGUMENT DEFINES
 ARG_DESCRIPTOR = "-D"
 ARG_PLUGIN = "-P"
 ARG_PARALLEL = "--parallel"
