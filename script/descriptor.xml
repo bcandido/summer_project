@@ -30,6 +30,10 @@
 				<description> Telnet connection</description>
 				<command> ./telnet.exp %domain %port </command>
 			</task>
+			<task>
+				<description> List domain main excharger </description>
+				<command> ./smtp-domainEnum.exp %domain </command>
+			</task>
 		</taskList>
 	</plugin>
 </taskrunner>
