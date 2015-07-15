@@ -74,23 +74,30 @@ def showTaskDescription(taskDescription):
 		print "Task %s: %s"%(key, taskDescription[key])
 
 #---------------------------------------------------------------------------------
+def getCommandList(task=None):
+	if task == None:
+		return
+	
+	commands = task.findall("./command")
+	commandList = []
+	for cmd in commands:
+		commandList.append(cmd.text)
+	return commandList
+
+#---------------------------------------------------------------------------------
 def runTasks(taskList, threading=False):
 	if threading:
 		threads = []
 		for task in taskList:
-			task = task.findall("./command")
-			commands = []
-			commands.append(task[0].text)
-			t = Thread(target=execute, args=(commands,))
+			commandList = getCommandList(task)
+			t = Thread(target=execute, args=(commandList,))
 			threads.append(t)
 			t.start()
 			
 	elif not(threading):
-		commands = []
 		for task in taskList:
-			task = task.findall("./command")
-			commands.append(task[0].text)
-		execute(commands)
+			commandList = getCommandList(task)
+			execute(commandList)
 
 #---------------------------------------------------------------------------------
 def execute(commands=None):

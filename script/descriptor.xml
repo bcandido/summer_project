@@ -10,11 +10,12 @@
 			</task>-->
 			<task>
 				<description> show the processes running </description>
-				<command>ls | grep wc -l</command>
+				<command> echo "foi 1"</command>
 			</task>
 			<task>
 				<description> displays files in the directory </description>
-				<command> ls %PATH -al </command>
+				<command> echo "foi 2 </command>
+				<command> echo "foi 3 </command>
 			</task>
 		</taskList>
 	</plugin>
@@ -22,8 +23,12 @@
 		<description> This plugin executes shell commands </description>
 		<taskList>
 			<task>
-				<description> home path </description>
-				<command> ls -l </command>
+				<description> Netcat connection</description>
+				<command> nc -v -z -w5 %domain %port </command>
+			</task>
+			<task>
+				<description> Telnet connection</description>
+				<command> ./telnet.exp %domain %port </command>
 			</task>
 		</taskList>
 	</plugin>
