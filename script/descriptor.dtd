@@ -3,7 +3,7 @@
 <!ELEMENT plugin (description*, taskList)>
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT taskList (task*)>
-<!ELEMENT task (description*, command)>
+<!ELEMENT task (description*, command+)>
 <!ELEMENT command (#PCDATA)>
 
 <!-- ATTRIBUTE LIST -->
