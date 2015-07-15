@@ -69,7 +69,7 @@ tasks, descriptions and commands. In order to achieve a better understand of the
 hierarchy and the element compositions.\\
 
 	The structure hierarchy is composed by a combination of elements. The main elements used are: plugin, task and command, and their composition are
-explained below:\\
+explained below:
 
 \begin{itemize}
 \item Each plugin has a plugin name, plugin description and a list of task;
@@ -77,11 +77,16 @@ explained below:\\
 \item A command is defined by a shell command, a predefined script or other console tools
 \end{itemize}
 
-The structure of the descriptor file can be seen in the Figura ~\ref{img:diagram}.
+\noindent
+The structure of the descriptor file can be seen in the Figure ~\ref{img:diagram}.
 
 \noindent
-\includegraphics[width=\textwidth]{images/diagram.png}
-\label{img:diagram}
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{images/diagram.png}
+	\caption{Descriptor Structure}
+	\label{img:diagram}
+\end{figure}
 
 	Extensible Markup Language also known as XML provides a nice and clean way to describe the structure of the descriptor file. Although there are other
 possibles formats that fits this structure like JSON or other text-based format, XML is easy to read and understand, and it make easier for expand the
