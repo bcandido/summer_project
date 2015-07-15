@@ -1,0 +1,11 @@
+<taskrunner>
+	<plugin name="myPlugin">
+		<description> My Plugin Description </description>
+		<taskList>
+			<task>
+				<description>My Task Description </description>
+				<command> echo My Task </command>
+			</task>
+		</taskList>
+	</plugin>
+</taskrunner>
