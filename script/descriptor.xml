@@ -24,15 +24,23 @@
 		<taskList>
 			<task>
 				<description> Netcat connection</description>
-				<command> nc -v -z -w5 %domain %port </command>
+				<command> nc -v -z -w5 %domain $port </command>
 			</task>
 			<task>
 				<description> Telnet connection</description>
-				<command> ./telnet.exp %domain %port </command>
+				<command> ./smtp-sendmail.exp $domain $port </command>
 			</task>
 			<task>
 				<description> List domain main excharger </description>
-				<command> ./smtp-domainEnum.exp %domain </command>
+				<command> ./smtp-domainEnum.exp $domain </command>
+			</task>
+			<task>
+				<description> SMTP Lookup</description>
+				<command> dig +nocmd +noall +answer mx $domain</command>
+			</task>
+			<task>
+				<description> DNS Lookup </description>
+				<command>dig +short $domain</command>
 			</task>
 		</taskList>
 	</plugin>

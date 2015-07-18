@@ -118,8 +118,8 @@ def execute(commands=None):
 #---------------------------------------------------------------------------------
 def updateCommand(command):
 	for cmd in command:
-		if cmd[0] == "%":
-			arg = cmd.replace("%", "-")
+		if cmd[0] == "$":
+			arg = cmd.replace("$", "-")
 			if (arg.upper() in sys.argv) or (arg.lower() in sys.argv):
 				command = replaceArg(command, cmd, arg)
 	return command
