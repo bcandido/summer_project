@@ -1,0 +1,15 @@
+#!/usr/bin/expect
+
+log_user 0
+
+set domain [lindex $argv 0]
+set port [lindex $argv 1]
+
+spawn telnet $domain $port
+sleep 1
+expect -re "(220) (.*?) (.*)" {
+	set banner $expect_out(2,string)
+	puts $banner
+}
+send "QUIT\r"
+expect eof

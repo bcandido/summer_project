@@ -1,0 +1,28 @@
+#!/usr/bin/expect
+
+set domain [lindex $argv 0]
+set port [lindex $argv 1]
+
+spawn time -f "%e" nc -v -z -w8 $domain $port
+
+expect -re "(\[0-9].\[0-9]\[0-9])" {
+	set result $expect_out(1,string)
+	puts "result: $result"
+	
+# 	this code is used for debbug
+# 	
+# 	spawn time -f "%e" sleep 7
+# 	expect eof
+# 	set result $expect_out(buffer)
+# 	puts "result: $result"
+	
+	if {$result < 5.00 } {
+		puts "Good Time Connection\r"
+	} else {
+		if {$result < 8.00 } {
+			puts "**Warning** Time Connection slow\r"
+		} else {
+			puts "**Alert** Time Connection too slow\r"
+		}
+	}
+}

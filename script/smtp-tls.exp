@@ -1,0 +1,33 @@
+#!/usr/bin/expect
+
+log_user 1
+
+set domain [lindex $argv 0]
+set port [lindex $argv 1]
+
+set from "support@tarkrunner.com"
+set rcpt "support@port25.com"
+set result "Somothing went wrong\r"
+
+spawn telnet $domain $port
+sleep 1
+expect "*\r"
+if [regexp "(220)(.*)" $expect_out(buffer)] {
+# 	puts "\nbegin\n$expect_out(buffer)\nend\n"
+	send "EHLO $domain\r"
+	sleep 1
+	expect -re "(.*)(STARTTLS)(.*)" {
+		send "STARTTLS\r"
+		sleep 1
+		expect "*\r"
+		if [regexp  "(220)(.*)" $expect_out(buffer)] then {
+			set result "This connection supports TLS\r"
+		} else {
+			set result "This connection DOES NOT supports TLS\r"
+		}
+		send "QUIT\r"
+		expect "*\r"
+	}
+}
+puts $result
+

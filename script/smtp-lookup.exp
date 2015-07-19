@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+
+set domain [lindex $argv 0]
+
+spawn dig +nocmd +noall +answer mx $domain
+expect "*\r"
+
+expect eof
