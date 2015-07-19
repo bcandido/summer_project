@@ -2,7 +2,7 @@
 <!DOCTYPE taskrunner SYSTEM "descriptor.dtd">
 <taskrunner>
 	<plugin name="shell">
-<!-- 		<description> This plugin executes shell commands </description> -->
+		<description> This plugin executes shell commands </description>
 		<taskList>
 			<!--<task>
 				<description> displays files in the directory </description>
@@ -22,25 +22,37 @@
 	<plugin name="smtp">
 		<description> This plugin executes shell commands </description>
 		<taskList>
-			<task>
-				<description> Netcat connection</description>
-				<command> nc -v -z -w5 %domain $port </command>
+			<!--<task>
+				<description> Netcat Connection</description>
+				<command> nc -v -z -w5 $domain $port </command>
 			</task>
 			<task>
-				<description> Telnet connection</description>
-				<command> ./smtp-sendmail.exp $domain $port </command>
+				<description> SMTP Send Mail</description>
+				<command> ./smtp-mail.exp $domain $port </command>
 			</task>
 			<task>
-				<description> List domain main excharger </description>
-				<command> ./smtp-domainEnum.exp $domain </command>
+				<description> SMTP TLS Test</description>
+				<command> ./smtp-tls.exp $domain $port </command>
 			</task>
 			<task>
 				<description> SMTP Lookup</description>
 				<command> dig +nocmd +noall +answer mx $domain</command>
 			</task>
 			<task>
+				<description> SMTP Resolution</description>
+				<command>./smtp-resolution.exp $ip </command>
+			</task>
+			<task>
 				<description> DNS Lookup </description>
 				<command>dig +short $domain</command>
+			</task>
+			<task>
+				<description> DNS Resolution</description>
+				<command>./dns-resolution.exp $ip </command>
+			</task>-->
+			<task>
+				<description> NMAP Test against SMTP</description>
+				<command>nmap --script=/usr/share/nmap/scripts/smtp-enum-users.nse $domain </command>
 			</task>
 		</taskList>
 	</plugin>
