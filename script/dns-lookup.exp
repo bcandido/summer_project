@@ -1,0 +1,6 @@
+#!/usr/bin/expect
+
+set domain [lindex $argv 0]
+
+spawn dig +short $domain
+expect eof

@@ -1,0 +1,10 @@
+#!/usr/bin/expect
+
+set ip [lindex $argv 0]
+
+# spawn nslookup -type=ptr $ip
+
+spawn nslookup -type=ptr $ip
+
+expect "*\r"
+expect eof
