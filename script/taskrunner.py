@@ -106,10 +106,9 @@ def execute(commands=None):
 			cmd = cmd.split(' ')
 			while '' in cmd:
 				cmd.remove('')
+				
 			cmd = updateCommand(cmd)
-			else:
-				output = subprocess.Popen(cmd, shell=False)
-			
+			output = subprocess.check_call(cmd, shell=False)
 			print output
 	return
 
