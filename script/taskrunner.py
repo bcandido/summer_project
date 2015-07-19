@@ -29,7 +29,7 @@ def main():
 		executionTime = time.clock() - start_time
 		
 		if executionTime != None:
-			print "All tasks were executed in %s"%(executionTime)
+			print "All tasks were executed in %s seconds"%(executionTime)
 
 #---------------------------------------------------------------------------------
 def getDescriptor(arguments):
@@ -107,11 +107,9 @@ def execute(commands=None):
 			while '' in cmd:
 				cmd.remove('')
 			cmd = updateCommand(cmd)
-			#if cmd.count("|") > 0:
-				## implement logic
-			#else:
-				#output = subprocess.check_output(cmd, shell=False)
-			output = subprocess.check_output(cmd, shell=False)
+			else:
+				output = subprocess.Popen(cmd, shell=False)
+			
 			print output
 	return
 
@@ -131,6 +129,20 @@ def replaceArg(command, cmd, arg):
 	command[indexArg] = sys.argv[indexValue]
 	
 	return command
+
+#---------------------------------------------------------------------------------
+def getSubCommandList(command):
+	subcmd = []
+	list = []
+	for c in command:
+		if c != "|":
+			list.append(c)
+		else:
+			subcmd.append(list)
+			list = []
+		
+	subcmd.append(list)
+	return subcmd
 
 #---------------------------------------------------------------------------------
 main()
