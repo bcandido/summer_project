@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import xml.etree.ElementTree as ElementTree
-from xml.sax.saxutils import escape
+from xml.sax.saxutils import unescape
 from xml.dom.minidom import Document
 import subprocess
 from threading import Thread
@@ -107,6 +107,7 @@ def runTasks(taskList, threading=False):
 		print "Is NOT recommended run --parallel option in display mode"
 		print "It may cause misunderstand for the user"
 	
+	outputList = []
 	if threading:
 		threads = []
 		for task in taskList:
@@ -114,14 +115,13 @@ def runTasks(taskList, threading=False):
 			t = Thread(target=execute, args=(commandList,))
 			threads.append(t)
 			t.start()
-			
+	
 	elif not(threading):
-		outputList = []
 		for task in taskList:
 			commandList = getCommandList(task)
 			execute(commandList, outputList)
-		
-		handleOutput(outputList)
+	
+	handleOutput(outputList)
 
 #---------------------------------------------------------------------------------
 def execute(commands=None, outputList=[]):
@@ -151,13 +151,6 @@ def replaceArg(command, cmd, arg):
 	
 	return command
 
-def update(command_str):
-	command_list = command_str.strip().split(' ')
-	print command_list
-	#for i in range(0, len(command)):
-		#if command[i] == '$':
-			
-
 #---------------------------------------------------------------------------------
 def handleOutput(outputList):
 	
@@ -175,22 +168,26 @@ def saveXML(outputList):
 	
 	for elem in outputList:
 		commandList, output = elem
-		#print commandList
 		task = doc.createElement('task')
 		for command in commandList:
+			command = " ".join(updateCommand(command.strip().split(' ')))
 			cmd = doc.createElement('command')
-			cmd.appendChild(doc.createTextNode(escape(command)))
+			cmd.appendChild(doc.createTextNode(command))
 			task.appendChild(cmd)
 			
 		output = output.strip().split('\n')
 		out = doc.createElement('output')
 		for line in output:
-			out.appendChild(doc.createTextNode(escape(line)))
+			out.appendChild(doc.createTextNode(line))
 		
 		task.appendChild(out)
 		taskList.appendChild(task)
 	
-	print doc.toprettyxml()
+	f = open('output_task.xml', 'w')
+	f.write(unescape(doc.toprettyxml()))
+	f.close()
+	
+	#print doc.toprettyxml()
 
 #---------------------------------------------------------------------------------
 def getSubCommandList(command):
