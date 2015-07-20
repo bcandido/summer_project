@@ -1,6 +1,10 @@
 #!/usr/bin/expect
 
+log_user 1
+
 set ip [lindex $argv 0]
 
 spawn dig -x $ip +short
+expect "*\r"
+puts $expect_out(buffer)
 expect eof
