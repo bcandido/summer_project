@@ -25,35 +25,35 @@
 			<!--<task>
 				<description> Netcat Connection</description>
 				<command> nc -v -z -w5 $domain $port </command>
-			</task>
-			<task>
+			</task>-->
+			<!--<task>
 				<description> SMTP Send Mail</description>
 				<command> ./smtp-mail.exp $domain $port </command>
-			</task>
-			<task>
+			</task>-->
+			<!--<task>
 				<description> SMTP TLS Test</description>
 				<command> ./smtp-tls.exp $domain $port </command>
-			</task>
-			<task>
-				<description> SMTP Lookup</description>
-				<command> dig +nocmd +noall +answer mx $domain</command>
-			</task>
-			<task>
-				<description> SMTP Resolution</description>
-				<command>./smtp-resolution.exp $ip </command>
-			</task>
-			<task>
-				<description> DNS Lookup </description>
-				<command>dig +short $domain</command>
-			</task>
-			<task>
-				<description> DNS Resolution</description>
-				<command>./dns-resolution.exp $ip </command>
 			</task>-->
 			<task>
-				<description> NMAP Test against SMTP</description>
-				<command>nmap --script=/usr/share/nmap/scripts/smtp-enum-users.nse $domain </command>
+				<description> SMTP Lookup</description>
+				<command> dig +noall +answer mx $domain</command>
 			</task>
+			<!--<task>
+				<description> SMTP Resolution</description>
+				<command>./smtp-resolution.exp $ip </command>
+			</task>-->
+			<!--<task>
+				<description> DNS Lookup </description>
+				<command>dig +short $domain</command>
+			</task>-->
+			<!--<task>
+				<description> DNS Resolution</description>
+				<command>./dns-resolution.py $ip </command>
+			</task>-->
+			<!--<task>
+				<description> NMAP Test against SMTP</description>
+				<command>nmap script=/usr/share/nmap/scripts/smtp-enum-users.nse $domain </command>
+			</task>-->
 		</taskList>
 	</plugin>
 </taskrunner>

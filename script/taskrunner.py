@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import xml.etree.ElementTree as ElementTree
-from xml.dom import minidom
+from xml.dom.minidom import Document
 import subprocess
 from threading import Thread
 import string
@@ -9,11 +9,16 @@ import time
 import sys
 import re
 
+import StringIO
+import lxml.etree as etree
+from xml.etree.ElementTree import Element, SubElement, Comment
+
 # ARGUMENT DEFINES
 ARG_DESCRIPTOR = "-D"
 ARG_PLUGIN = "-P"
 ARG_PARALLEL = "--parallel"
 ARG_TASKVIEW = "--list"
+ARG_OUTPUT =  "--xml"
 
 def main():
 
@@ -86,6 +91,10 @@ def getCommandList(task=None):
 
 #---------------------------------------------------------------------------------
 def runTasks(taskList, threading=False):
+	if ("--xml" not in sys.argv) and ("--parallel" in sys.argv):
+		print "Is NOT recommended run --parallel option in display mode"
+		print "It may cause misunderstand for the user"
+	
 	if threading:
 		threads = []
 		for task in taskList:
@@ -97,27 +106,27 @@ def runTasks(taskList, threading=False):
 	elif not(threading):
 		for task in taskList:
 			commandList = getCommandList(task)
-			execute(commandList)
+			outputList = []
+			execute(commandList, outputList)
+			handleOutput(outputList, task, commandList)
 
 #---------------------------------------------------------------------------------
-def execute(commands=None):
+def execute(commands=None, outputList=[]):
 	if commands != None:
 		for cmd in commands:
 			cmd = cmd.split(' ')
 			while '' in cmd:
 				cmd.remove('')
-				
 			cmd = updateCommand(cmd)
-			output = subprocess.check_call(cmd, shell=False)
+			output = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE).communicate()
 			print output
-	return
+			outputList.append(output[0])
 
 #---------------------------------------------------------------------------------
 def updateCommand(command):
 	for cmd in command:
 		if cmd[0] == "$":
 			arg = cmd.replace("$", "-")
-			print arg
 			if (arg.upper() in sys.argv) or (arg.lower() in sys.argv):
 				command = replaceArg(command, cmd, arg)
 	return command
@@ -129,6 +138,38 @@ def replaceArg(command, cmd, arg):
 	command[indexArg] = sys.argv[indexValue]
 	
 	return command
+
+#---------------------------------------------------------------------------------
+def handleOutput(outputList, task, commandList):
+	
+	if "--xml" in sys.argv:
+		saveXML(outputList, task, commandList)
+	else:
+		print outputList
+
+#---------------------------------------------------------------------------------
+def saveXML(outputList, task, commandList):
+	
+	doc = Document()
+	taskList = doc.createElement('taskList')
+	doc.appendChild(taskList)
+	
+	for output in outputList:
+		task = doc.createElement('task')
+		for command in commandList:
+			cmd = doc.createElement('command')
+			cmd.appendChild(doc.createTextNode(command))
+			task.appendChild(cmd)
+			
+		output = output.strip().split('\n')
+		out = doc.createElement('output')
+		for line in output:
+			out.appendChild(doc.createTextNode(line))
+		
+		task.appendChild(out)
+		taskList.appendChild(task)
+	
+	print doc.toprettyxml()
 
 #---------------------------------------------------------------------------------
 def getSubCommandList(command):
