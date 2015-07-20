@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import xml.etree.ElementTree as ElementTree
+from xml.sax.saxutils import escape
 from xml.dom.minidom import Document
 import subprocess
 from threading import Thread
@@ -90,6 +91,17 @@ def getCommandList(task=None):
 	return commandList
 
 #---------------------------------------------------------------------------------
+def getTaskList(taskList=None):
+	if taskList == None:
+		return
+	
+	tasks = taskList.findall("./task")
+	taskList = []
+	for task in taskList:
+		taskList.append(task.text)
+	return taskList
+
+#---------------------------------------------------------------------------------
 def runTasks(taskList, threading=False):
 	if ("--xml" not in sys.argv) and ("--parallel" in sys.argv):
 		print "Is NOT recommended run --parallel option in display mode"
@@ -104,23 +116,23 @@ def runTasks(taskList, threading=False):
 			t.start()
 			
 	elif not(threading):
+		outputList = []
 		for task in taskList:
 			commandList = getCommandList(task)
-			outputList = []
 			execute(commandList, outputList)
-			handleOutput(outputList, task, commandList)
+		
+		handleOutput(outputList)
 
 #---------------------------------------------------------------------------------
 def execute(commands=None, outputList=[]):
 	if commands != None:
 		for cmd in commands:
-			cmd = cmd.split(' ')
-			while '' in cmd:
-				cmd.remove('')
+			cmd = cmd.strip().split(' ')
+			#while '' in cmd:
+				#cmd.remove('')
 			cmd = updateCommand(cmd)
 			output = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE).communicate()
-			print output
-			outputList.append(output[0])
+			outputList.append((commands, output[0]))
 
 #---------------------------------------------------------------------------------
 def updateCommand(command):
@@ -139,32 +151,41 @@ def replaceArg(command, cmd, arg):
 	
 	return command
 
+def update(command_str):
+	command_list = command_str.strip().split(' ')
+	print command_list
+	#for i in range(0, len(command)):
+		#if command[i] == '$':
+			
+
 #---------------------------------------------------------------------------------
-def handleOutput(outputList, task, commandList):
+def handleOutput(outputList):
 	
 	if "--xml" in sys.argv:
-		saveXML(outputList, task, commandList)
+		saveXML(outputList)
 	else:
 		print outputList
 
 #---------------------------------------------------------------------------------
-def saveXML(outputList, task, commandList):
+def saveXML(outputList):
 	
 	doc = Document()
 	taskList = doc.createElement('taskList')
 	doc.appendChild(taskList)
 	
-	for output in outputList:
+	for elem in outputList:
+		commandList, output = elem
+		#print commandList
 		task = doc.createElement('task')
 		for command in commandList:
 			cmd = doc.createElement('command')
-			cmd.appendChild(doc.createTextNode(command))
+			cmd.appendChild(doc.createTextNode(escape(command)))
 			task.appendChild(cmd)
 			
 		output = output.strip().split('\n')
 		out = doc.createElement('output')
 		for line in output:
-			out.appendChild(doc.createTextNode(line))
+			out.appendChild(doc.createTextNode(escape(line)))
 		
 		task.appendChild(out)
 		taskList.appendChild(task)
