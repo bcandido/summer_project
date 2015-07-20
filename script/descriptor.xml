@@ -23,10 +23,6 @@
 		<description> This plugin executes shell commands </description>
 		<taskList>
 			<!--<task>
-				<description> Netcat Connection</description>
-				<command> nc -v -z -w5 $domain $port </command>
-			</task>-->
-			<!--<task>
 				<description> SMTP Send Mail</description>
 				<command> ./smtp-mail.exp $domain $port </command>
 			</task>-->
@@ -37,6 +33,10 @@
 			<task>
 				<description> SMTP Lookup</description>
 				<command> dig +noall +answer mx $domain</command>
+			</task>
+			<task>
+				<description> SMTP Connection</description>
+				<command>./smtp-connection.exp $domain $port </command>
 			</task>
 			<!--<task>
 				<description> SMTP Resolution</description>
