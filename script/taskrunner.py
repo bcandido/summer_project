@@ -117,6 +117,7 @@ def updateCommand(command):
 	for cmd in command:
 		if cmd[0] == "$":
 			arg = cmd.replace("$", "-")
+			print arg
 			if (arg.upper() in sys.argv) or (arg.lower() in sys.argv):
 				command = replaceArg(command, cmd, arg)
 	return command
