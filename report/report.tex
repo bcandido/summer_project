@@ -54,6 +54,90 @@ creating a Simple Mail Transfer Protocol Plugin (SMTP Plugin).\\
 
 \clearpage
 
+\section{Introduction and Objectives}
+
+\section{Research undertaken}
+
+In the beginning, a research was made to gain background information about the topics that are potentially important to achieve the main objects of this project i.e. create a expandable and generic console tool application in order to automate manual tasks to speedup test and checks during a Penetration Testing Process. The research was based on finding related works and technologies used in the development process of the tool. Furthermore, to create a SMTP Plugin tool, a research about the main characteristics of smtp protocol, smtp servers, how to check they and, where Pen Testers can potentially explore in order to attack or gathering information.
+
+\subsection{Related Works}
+
+In order to provide a better understand about what to achieve to develop a expandable and generic console tool application, this session will focus on others tools that are related to this work. Firstly, a network infrastructure tool designed to automate and speed up the penetration testing process. Secondly, a tool made to perform tests to SMTP Server. Both tools has similarities and differences that will be highlighted in their section.
+
+
+\subsubsection{Sparta - Network Infrastructure Penetration Testing Tool}
+
+Sparta is a python GUI application which has almost the same goal as this project: an application to save time during some stage of the Penetration Test. Sparta was made to help penetration testing against network infrastructure. It can be used at the scanning and enumeration stage (Sparta Secforce, 2015). Sparta also helps tester save time by having point-and-click access to the tester's toolkit and by displaying the outputs in a nice and convenient way. However, Sparta does not do everything automatically, the tester has to take a time to set up the commands application needs to run. It is another point of similarity with this project, both  have a time consumption for the tester setting up the commands that will be performed. Sparta gives to the tester more time to focus on analysing the results instead of waste time performing the tests manually command-by-command. 
+
+\subsubsection{NetScanTool}
+
+In order to provide another example of a related work. This next tool that will be shown is a good example of a test/check SMTP Server, which are one important goal of the project. This tool is called NetScanTool. Its is designed  to be a SMTP Server Test Tool providing tests by sending email message through an SMTP Server. Its also allow to access and edit email header parameters such as From, To, Date, and Subject. NetScanTool provides supports to SMTP Authentication, basic or using STARTTLS with username and password. As another extended feature of this tool is the Email Relay Testing tool that comes with 17 common relay tests by communicating with a SMTP server. Even NetScanTool has a good set of testing tool, however its does not provide an extensibility to add different tests or customize predefined tests.
+
+\subsection{Simple Mail Transfer Protocol}
+
+Simple Mail Transfer Protocol are the most mail exchange used over the internet. This is an Internet standard that uses by default Transmission Control Protocol (TCP) on port 25, and for secure connection known as SMTPS uses TCP on port 465, however SMTPS on port 465 is not a standard even being widely used. A SMTP Server listen for connection, whereas a SMTP Client has to attempt to connect to the server. SMTP Servers respond with a three digit code, where the first digit indicates success or failure, and the next two digits provide more specific details about the response message, for further informations about SMTP Response codes check RFC 3463 (2003). After a connection being accepted and established by the server, the client at this point can interact with the server, and send an email.
+
+\subsubsection{Sending Mail via Telnet}
+
+In order to demonstrate a simple usage of SMTP Protocol, this section will show step by step of how to send an email using Telnet, the simplest TCP/IP command-line oriented tool (Korra'ti, 2005). By using a command line tool, and having a Telnet setup in the machine. Firstly, a connection will be created between the machine and a the SMTP Server on a certain port. It can be done by running the following command:
+
+telnet [smtp-server] [port]
+telnet mail.port25.com 25
+
+If the connection succeed, a response that looks like this:
+
+\noindent
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{images/sendmail_01.png}
+	\caption{Send Mail}
+	\label{img:sendmail_01}
+\end{figure}
+
+\noindent
+notice the response code was 220, that means that the connection succeeded, however the server could respond with a 5.x.x response message if the server is unavailable in that moment for some reason causing a failure in the connection. Now, the connection was created and the SMTP Server waits for requests of the client. The client needs to specify a domain to talk to by typing:
+
+EHLO [domain] or HELO [domain]
+EHLO mx1.emailsrvr.com
+
+A similar response will be display:
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{images/sendmail_02.png}
+	\caption{Send Mail}
+	\label{img:sendmail_02}
+\end{figure}
+
+Now, to continue sending an email, the client needs specify sender and receiver:
+
+MAIL FROM: <sender email address>
+RCPT TO: <receiver email address>
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{images/sendmail_03.png}
+	\caption{Send Mail}
+	\label{img:sendmail_03}
+\end{figure}
+
+Once all addresses have been specified, to write the email content type DATA, and then write the email content. After finish to type the email content, type a single dot in a new line. The server now will respond if the email request was accepted or not. To leave the connection type QUIT and the connection will be closed. This process can be seen in the nexts images
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{images/sendmail_04.png}
+	\caption{Send Mail}
+	\label{img:sendmail_04}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{images/sendmail_05.png}
+	\caption{Send Mail}
+	\label{img:sendmail_05}
+\end{figure}
+
+\subsection{SMTP Server Tests and Checks}
+
 \section{Implementation}
 
 	To reach the goals of this project, a python script called Taskrunner was developed as well as a xml structure was defined to be interpreted by the
