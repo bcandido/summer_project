@@ -34,7 +34,7 @@ expect -re "(\[0-9]+) (.*)" {
 	sleep 1
 	
 	expect "*\r"
-	if [regexp "250 (.*)" $expect_out(buffer)] then {
+	if [regexp "550 (.*)" $expect_out(buffer)] then {
 # 		puts "\nbegin\n$expect_out(buffer)\nend\n"
 		send "DATA\r"
 		send "This is a test message sent from a manual telnet session.\r"
@@ -44,7 +44,7 @@ expect -re "(\[0-9]+) (.*)" {
 		set rcpt_sent $rcpt_fake
 		set warning "Maybe an open Relay\r"
 	} else {
-	if [regexp "550 (.*)" $expect_out(buffer)] then {
+	if [regexp "250 (.*)" $expect_out(buffer)] then {
 		send "RCPT TO: <$rcpt_real>\r"
 		sleep 1
 		
