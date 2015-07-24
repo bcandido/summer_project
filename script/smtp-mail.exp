@@ -35,16 +35,6 @@ expect -re "(\[0-9]+) (.*)" {
 	
 	expect "*\r"
 	if [regexp "550 (.*)" $expect_out(buffer)] then {
-# 		puts "\nbegin\n$expect_out(buffer)\nend\n"
-		send "DATA\r"
-		send "This is a test message sent from a manual telnet session.\r"
-		send ".\r"
-		send "QUIT\r"
-		expect eof
-		set rcpt_sent $rcpt_fake
-		set warning "Maybe an open Relay\r"
-	} else {
-	if [regexp "250 (.*)" $expect_out(buffer)] then {
 		send "RCPT TO: <$rcpt_real>\r"
 		sleep 1
 		
@@ -55,13 +45,25 @@ expect -re "(\[0-9]+) (.*)" {
 			
 			send "This is a test message sent from a manual telnet session.\r"
 			send ".\r"
+			sleep 1
 			
 			set rcpt_sent $rcpt_real
+			set warning "Maybe an open Relay\r"
 		}
+	} else {
+	if [regexp "250 (.*)" $expect_out(buffer)] then {
+		send "DATA\r"
+		send "This is a test message sent from a manual telnet session.\r"
+		send ".\r"
+		send "QUIT\r"
+		expect eof
+		set rcpt_sent $rcpt_fake
+		set warning "Maybe an open Relay\r"
+		
 	}}
+	
+	send "QUIT\r"
+	puts "Mail sent from <$from> to <$rcpt_sent>\r"
+	puts $warning
+	expect eof
 }
-
-send "QUIT\r"
-puts "Mail sent from <$from> to <$rcpt_sent>\r"
-puts $warning
-expect eof
